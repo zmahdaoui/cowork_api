@@ -1,0 +1,23 @@
+{
+	"rootAPI": "/api-sg/v1/",
+	"port": 3030,
+	"db":{
+		"host": "localhost",
+		"database": "cowork",
+		"user": "root",
+		"password": ""
+	},
+	"errors": {
+		"unknownID": "unknown id",
+		"unknownLocation": "unknown location",
+		"wrongIDs": "wrong id or id2",
+		"wrongEmailOrPwd": "wrong email or password",
+		"wrongMaxValue": "wrong max value",
+		"emailAlreadyTaken": "email already taken",
+		"locationAlreadyExist": "location already exist",
+		"abonnementAlreadyExist": "abonnement already exist",
+		"noNameValue": "no name value",
+		"sameName": "same name"
+		
+	}
+}
