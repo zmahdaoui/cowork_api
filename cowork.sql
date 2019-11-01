@@ -1,0 +1,361 @@
+-- phpMyAdmin SQL Dump
+-- version 4.1.14
+-- http://www.phpmyadmin.net
+--
+-- Client :  127.0.0.1
+-- Généré le :  Ven 01 Novembre 2019 à 18:04
+-- Version du serveur :  5.6.17
+-- Version de PHP :  5.5.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de données :  `cowork`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `abonnement`
+--
+
+CREATE TABLE IF NOT EXISTS `abonnement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `commitment` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `abonnement`
+--
+
+INSERT INTO `abonnement` (`id`, `name`, `price`, `commitment`) VALUES
+(7, 'abonnement simple', 240, 1),
+(8, 'abonnement simple', 24, 0),
+(9, 'abonnement résident', 300, 0),
+(10, 'abonnement résident', 2016, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `message`
+--
+
+CREATE TABLE IF NOT EXISTS `message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_sender` int(11) NOT NULL,
+  `id_receiver` int(11) NOT NULL,
+  `id_ticket` int(11) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `date_sending` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `open_space`
+--
+
+CREATE TABLE IF NOT EXISTS `open_space` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location` varchar(255) NOT NULL,
+  `wifi` varchar(255) NOT NULL,
+  `drink` varchar(255) NOT NULL,
+  `plateau_repas` varchar(255) NOT NULL,
+  `conf_room` int(11) NOT NULL,
+  `call_room` int(11) NOT NULL,
+  `cosy_room` int(11) NOT NULL,
+  `printers` int(11) NOT NULL,
+  `laptops` int(11) NOT NULL,
+  `schedule_mt` varchar(255) NOT NULL,
+  `schedule_f` varchar(255) NOT NULL,
+  `schedule_we` varchar(255) NOT NULL,
+  `adresse` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+
+--
+-- Contenu de la table `open_space`
+--
+
+INSERT INTO `open_space` (`id`, `location`, `wifi`, `drink`, `plateau_repas`, `conf_room`, `call_room`, `cosy_room`, `printers`, `laptops`, `schedule_mt`, `schedule_f`, `schedule_we`, `adresse`) VALUES
+(4, 'Bastille', 'true', 'true', 'true', 2, 3, 1, 1, 0, '9,20', '9,20', '11,20', '21-19 Rue Saint-Antoine 75004 Paris'),
+(5, 'Republique', 'true', 'true', 'false', 7, 5, 4, 3, 25, '8,21', '9,23', '9,20', '1 Place de la République 75003 Paris'),
+(7, 'Odéon', 'true', 'true', 'true', 4, 2, 2, 2, 18, '9,20', '9,20', '11,20', 'Place Henri Mondor 75006 Paris'),
+(9, 'Place d''Italie', 'true', 'true', 'true', 5, 4, 3, 1, 20, '9,20', '9,20', '11,20', '79 Avenue des Gobelins 75013 Paris'),
+(10, 'Ternes', 'true', 'true', 'false', 7, 5, 4, 3, 20, '8,21', '9,23', '9,20', '42 Avenue de Wagram 75008 Paris'),
+(11, 'Beaubourg', 'true', 'true', 'true', 2, 3, 1, 1, 20, '9,20', '9,20', '11,20', '112-142 Rue Saint-Martin 75004 Paris');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `orders`
+--
+
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location` varchar(255) NOT NULL,
+  `date_order` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `time` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `reservation`
+--
+
+CREATE TABLE IF NOT EXISTS `reservation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location` varchar(255) NOT NULL,
+  `start` int(11) NOT NULL,
+  `end` int(11) NOT NULL,
+  `date_res` varchar(255) NOT NULL,
+  `number` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `subscriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `subscriptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subscription_type` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subscription_date` varchar(255) NOT NULL,
+  `subscription_end` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `tech_mat`
+--
+
+CREATE TABLE IF NOT EXISTS `tech_mat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `number` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=158 ;
+
+--
+-- Contenu de la table `tech_mat`
+--
+
+INSERT INTO `tech_mat` (`id`, `type`, `location`, `number`) VALUES
+(3, 'printer', 'Bastille', 1),
+(4, 'printer', 'Republique', 1),
+(5, 'printer', 'Republique', 2),
+(6, 'printer', 'Republique', 3),
+(7, 'laptop', 'Republique', 1),
+(8, 'laptop', 'Republique', 2),
+(9, 'laptop', 'Republique', 3),
+(10, 'laptop', 'Republique', 4),
+(11, 'laptop', 'Republique', 5),
+(12, 'laptop', 'Republique', 6),
+(13, 'laptop', 'Republique', 7),
+(14, 'laptop', 'Republique', 8),
+(15, 'laptop', 'Republique', 9),
+(16, 'laptop', 'Republique', 10),
+(17, 'laptop', 'Republique', 11),
+(18, 'laptop', 'Republique', 12),
+(19, 'laptop', 'Republique', 13),
+(20, 'laptop', 'Republique', 14),
+(21, 'laptop', 'Republique', 15),
+(22, 'laptop', 'Republique', 16),
+(23, 'laptop', 'Republique', 17),
+(24, 'laptop', 'Republique', 18),
+(25, 'laptop', 'Republique', 19),
+(26, 'laptop', 'Republique', 20),
+(27, 'laptop', 'Republique', 21),
+(28, 'laptop', 'Republique', 22),
+(29, 'laptop', 'Republique', 23),
+(30, 'laptop', 'Republique', 24),
+(31, 'laptop', 'Republique', 25),
+(32, 'printer', 'Odéon', 1),
+(33, 'printer', 'Odéon', 2),
+(34, 'laptop', 'Odéon', 1),
+(35, 'laptop', 'Odéon', 2),
+(36, 'laptop', 'Odéon', 3),
+(37, 'laptop', 'Odéon', 4),
+(38, 'laptop', 'Odéon', 5),
+(39, 'laptop', 'Odéon', 6),
+(40, 'laptop', 'Odéon', 7),
+(41, 'laptop', 'Odéon', 8),
+(42, 'laptop', 'Odéon', 9),
+(43, 'laptop', 'Odéon', 10),
+(44, 'laptop', 'Odéon', 11),
+(45, 'laptop', 'Odéon', 12),
+(46, 'laptop', 'Odéon', 13),
+(47, 'laptop', 'Odéon', 14),
+(48, 'laptop', 'Odéon', 15),
+(49, 'laptop', 'Odéon', 16),
+(50, 'laptop', 'Odéon', 17),
+(51, 'laptop', 'Odéon', 18),
+(52, 'printer', 'Odéon', 1),
+(53, 'printer', 'Odéon', 2),
+(54, 'laptop', 'Odéon', 1),
+(55, 'laptop', 'Odéon', 2),
+(56, 'laptop', 'Odéon', 3),
+(57, 'laptop', 'Odéon', 4),
+(58, 'laptop', 'Odéon', 5),
+(59, 'laptop', 'Odéon', 6),
+(60, 'laptop', 'Odéon', 7),
+(61, 'laptop', 'Odéon', 8),
+(62, 'laptop', 'Odéon', 9),
+(63, 'laptop', 'Odéon', 10),
+(64, 'laptop', 'Odéon', 11),
+(65, 'laptop', 'Odéon', 12),
+(66, 'laptop', 'Odéon', 13),
+(67, 'laptop', 'Odéon', 14),
+(68, 'laptop', 'Odéon', 15),
+(69, 'laptop', 'Odéon', 16),
+(70, 'laptop', 'Odéon', 17),
+(71, 'laptop', 'Odéon', 18),
+(72, 'printer', 'Place d''Italie', 1),
+(73, 'laptop', 'Place d''Italie', 1),
+(74, 'laptop', 'Place d''Italie', 2),
+(75, 'laptop', 'Place d''Italie', 3),
+(76, 'laptop', 'Place d''Italie', 4),
+(77, 'laptop', 'Place d''Italie', 5),
+(78, 'laptop', 'Place d''Italie', 6),
+(79, 'laptop', 'Place d''Italie', 7),
+(80, 'laptop', 'Place d''Italie', 8),
+(81, 'laptop', 'Place d''Italie', 9),
+(82, 'laptop', 'Place d''Italie', 10),
+(83, 'laptop', 'Place d''Italie', 11),
+(84, 'laptop', 'Place d''Italie', 12),
+(85, 'laptop', 'Place d''Italie', 13),
+(86, 'laptop', 'Place d''Italie', 14),
+(87, 'laptop', 'Place d''Italie', 15),
+(88, 'laptop', 'Place d''Italie', 16),
+(89, 'laptop', 'Place d''Italie', 17),
+(90, 'laptop', 'Place d''Italie', 18),
+(91, 'laptop', 'Place d''Italie', 19),
+(92, 'laptop', 'Place d''Italie', 20),
+(93, 'printer', 'Place d''Italie', 1),
+(94, 'laptop', 'Place d''Italie', 1),
+(95, 'laptop', 'Place d''Italie', 2),
+(96, 'laptop', 'Place d''Italie', 3),
+(97, 'laptop', 'Place d''Italie', 4),
+(98, 'laptop', 'Place d''Italie', 5),
+(99, 'laptop', 'Place d''Italie', 6),
+(100, 'laptop', 'Place d''Italie', 7),
+(101, 'laptop', 'Place d''Italie', 8),
+(102, 'laptop', 'Place d''Italie', 9),
+(103, 'laptop', 'Place d''Italie', 10),
+(104, 'laptop', 'Place d''Italie', 11),
+(105, 'laptop', 'Place d''Italie', 12),
+(106, 'laptop', 'Place d''Italie', 13),
+(107, 'laptop', 'Place d''Italie', 14),
+(108, 'laptop', 'Place d''Italie', 15),
+(109, 'laptop', 'Place d''Italie', 16),
+(110, 'laptop', 'Place d''Italie', 17),
+(111, 'laptop', 'Place d''Italie', 18),
+(112, 'laptop', 'Place d''Italie', 19),
+(113, 'laptop', 'Place d''Italie', 20),
+(114, 'printer', 'Ternes', 1),
+(115, 'printer', 'Ternes', 2),
+(116, 'printer', 'Ternes', 3),
+(117, 'laptop', 'Ternes', 1),
+(118, 'laptop', 'Ternes', 2),
+(119, 'laptop', 'Ternes', 3),
+(120, 'laptop', 'Ternes', 4),
+(121, 'laptop', 'Ternes', 5),
+(122, 'laptop', 'Ternes', 6),
+(123, 'laptop', 'Ternes', 7),
+(124, 'laptop', 'Ternes', 8),
+(125, 'laptop', 'Ternes', 9),
+(126, 'laptop', 'Ternes', 10),
+(127, 'laptop', 'Ternes', 11),
+(128, 'laptop', 'Ternes', 12),
+(129, 'laptop', 'Ternes', 13),
+(130, 'laptop', 'Ternes', 14),
+(131, 'laptop', 'Ternes', 15),
+(132, 'laptop', 'Ternes', 16),
+(133, 'laptop', 'Ternes', 17),
+(134, 'laptop', 'Ternes', 18),
+(135, 'laptop', 'Ternes', 19),
+(136, 'laptop', 'Ternes', 20),
+(137, 'printer', 'Beaubourg', 1),
+(138, 'laptop', 'Beaubourg', 1),
+(139, 'laptop', 'Beaubourg', 2),
+(140, 'laptop', 'Beaubourg', 3),
+(141, 'laptop', 'Beaubourg', 4),
+(142, 'laptop', 'Beaubourg', 5),
+(143, 'laptop', 'Beaubourg', 6),
+(144, 'laptop', 'Beaubourg', 7),
+(145, 'laptop', 'Beaubourg', 8),
+(146, 'laptop', 'Beaubourg', 9),
+(147, 'laptop', 'Beaubourg', 10),
+(148, 'laptop', 'Beaubourg', 11),
+(149, 'laptop', 'Beaubourg', 12),
+(150, 'laptop', 'Beaubourg', 13),
+(151, 'laptop', 'Beaubourg', 14),
+(152, 'laptop', 'Beaubourg', 15),
+(153, 'laptop', 'Beaubourg', 16),
+(154, 'laptop', 'Beaubourg', 17),
+(155, 'laptop', 'Beaubourg', 18),
+(156, 'laptop', 'Beaubourg', 19),
+(157, 'laptop', 'Beaubourg', 20);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ticket`
+--
+
+CREATE TABLE IF NOT EXISTS `ticket` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `date_creation` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `last_name` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `birthday` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `client` varchar(255) NOT NULL,
+  `date_inscription` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
