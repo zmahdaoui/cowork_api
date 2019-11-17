@@ -39,6 +39,7 @@ let Users = class {
 		})
 	}
 
+
 	//connexion
 	static loginPro(email,password){
 		return new Promise((next)=> {

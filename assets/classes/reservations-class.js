@@ -25,12 +25,9 @@ let Reservations = class {
 	
 	static getUserReservations(id_user){
 		return new Promise((next) => {
-			db.query('SELECT * FROM reservation WHERE id_user = ? ', [id_user])
+			db.query('SELECT * FROM reservation WHERE id_user = ?  ORDER BY id DESC', [id_user])
 				.then((result) =>  {
 					if(result != []){
-						let now = ''
-						now = date.format(new Date(), 'ddd. MMM. DD YYYY')
-						
 						next(result)
 					}else
 						next(new Error(config.errors.unknownID))			

@@ -299,7 +299,7 @@ mysql.createConnection({
 				if(err){
 					res.sendStatus(403)
 				}else{
-					res.json(checkAndChange(opensSapce))
+					res.json(checkAndChange(openSpace))
 				}
 			})
 		})
@@ -359,10 +359,29 @@ mysql.createConnection({
 		})
 /////////////////////////////orders////////////////////////////////////
 	UsersRouter.route('/orders')
-		.get(async (req,res) => {
+		.get(verifyToken, async (req,res) => {
 			let order = await Orders.getAll(req.query.max)
-			res.json(checkAndChange(order))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(order))
+				}
+			})
 		})
+
+	UsersRouter.route('/user/order/:user_id')
+		.get(verifyToken, async (req,res) => {
+			let order = await Orders.getUserOrders(req.params.user_id)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(order))
+				}
+			})
+		})
+
 
 	UsersRouter.route('/orders/:id')
 		.get(async (req,res) => {
@@ -375,9 +394,15 @@ mysql.createConnection({
 		})
 
 	UsersRouter.route('/orders/create')
-		.post(async (req,res) => {
+		.post(verifyToken, async (req,res) => {
 			let order = await Orders.createOrder(req.body.location, req.body.date_order, req.body.user_id, req.body.count, req.body.time)
-			res.json(checkAndChange(order))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(order))
+				}
+			})
 		})
 
 /////////////////////////////mails////////////////////////////////////

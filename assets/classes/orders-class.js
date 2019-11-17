@@ -31,7 +31,8 @@ let Orders = class {
 					if(result[0] != undefined){
 						if(user_id == undefined ) user_id = 0
 						if(count == undefined) count = 0
-						if(time != undefined || time.trim()!='') time = 'non renseigné'
+						if(time == undefined || time.trim()=='') time = 'non renseigné'
+						
 						var date_order_string = ''
 						if(date_order != undefined || date_order.trim()!=''){
 							const date_order_parse = date.parse(date_order ,'YYYY/MM/DD HH:mm:ss')
@@ -39,24 +40,53 @@ let Orders = class {
 						}else{
 							date_order_string = date.format(new Date(), 'ddd. MMM. DD YYYY, HH:mm:SS')
 						}
+
+						var hour = time.split(':');
+						hour = parseInt(hour[0],10)
+						var day = date_order_string.substring(0,3)
+						if(day == 'Sat' || day == 'Sun'){
+							var schedule = result[0].schedule_we.split(',')
+							var schedule_s = parseInt(schedule[0],10) 
+							var schedule_e = parseInt(schedule[1],10)
+							if(hour< schedule_s || hour>schedule_e)
+								next(Error('Horaire du jour '+schedule))
+						}else if(day == 'Fri'){
+							var schedule = result[0].schedule_f.split(',')
+							var schedule_s = parseInt(schedule[0],10) 
+							var schedule_e = parseInt(schedule[1],10)
+							if(hour< schedule_s || hour>schedule_e)
+								next(Error('Horaire du jour '+schedule))
+						}else{
+							var schedule = result[0].schedule_mt.split(',')
+							var schedule_s = parseInt(schedule[0],10) 
+							var schedule_e = parseInt(schedule[1],10)
+							if(hour< schedule_s || hour>schedule_e)
+								next(Error('Horaire du jour '+schedule))
+						}
+
 						return db.query('INSERT INTO orders(location, date_order, user_id, count, time) VALUES(?, ?, ?, ?, ?)', [location, date_order_string, user_id, count, time])						
 					}else{
 						next(new Error(config.errors.unknownLocation))
 					}
 				})
 				.then(() => {
-					return db.query('SELECT * FROM orders WHERE location = ? AND date_order = ? AND user_id = ? AND count = ? AND time = ?',[location, date_order, user_id, count, time])
+					var date_order_string = ''
+					if(date_order != undefined || date_order.trim()!=''){
+						const date_order_parse = date.parse(date_order ,'YYYY/MM/DD HH:mm:ss')
+						date_order_string = date.format(date_order_parse, 'ddd. MMM. DD YYYY, HH:mm:SS')
+					}else{
+						date_order_string = date.format(new Date(), 'ddd. MMM. DD YYYY, HH:mm:SS')
+					}
+					return db.query('SELECT * FROM orders WHERE location = ? AND date_order = ? AND user_id = ? AND count = ? AND time = ?',[location, date_order_string, user_id, count, time])
 				})
 				.then((result) => {
 					next({
-						id_user: result[0].id,
-						last_name: result[0].last_name,
-						first_name: result[0].first_name,
-						email: result[0].email,
-						age: result[0].age,
-						password: result[0].password,
-						date_inscription: result[0].date_inscription,
-						client: result[0].client
+						id: result[0].id,
+						location: result[0].location,
+						date_order: result[0].date_order,
+						user_id: result[0].user_id,
+						count: result[0].count,
+						time: result[0].time
 					})
 				})
 				.catch((err) => next(err))
@@ -93,4 +123,17 @@ let Orders = class {
 			}
 		})
 	}
+
+	static getUserOrders(user_id){
+		return new Promise((next) => {
+			db.query('SELECT * FROM orders WHERE user_id = ?  ORDER BY id DESC', [user_id])
+				.then((result) =>  {
+					if(result != []){				
+						next(result)
+					}else
+						next(new Error(config.errors.unknownID))			
+				})
+				.catch((err) =>  reject(err))			
+		})
+    }
 }

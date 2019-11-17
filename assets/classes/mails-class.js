@@ -41,15 +41,5 @@ let Mails = class {
             }
             console.log(info);
         })
-        /*try{
-            await transporter.sendMail(mailOptions);
-            transporter.close();
-
-            console.log('Message sent');
-            next('email sent!!!!');
-        }catch(err){
-            console.log(err);
-            next(new Error(err));
-        }*/
     }
 }
