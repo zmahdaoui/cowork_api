@@ -11,6 +11,7 @@ module.exports = (_db, _config) => {
 }
 
 let Orders = class {
+
     static getByID(id){
 		return new Promise((next) => {
 			db.query('SELECT * FROM orders WHERE id = ?', [id])
@@ -135,5 +136,47 @@ let Orders = class {
 				})
 				.catch((err) =>  reject(err))			
 		})
-    }
+	}
+	
+	static getOpenspaceOrders(location){
+		return new Promise((next) => {
+			db.query('SELECT * FROM open_space WHERE location = ?', [location])
+				.then((result) => {
+					if(result != null){
+						var date_order_string = ''
+						var date_order_sub = ''							
+						date_order_string = date.format(new Date(), 'ddd. MMM. DD YYYY, HH:mm:SS')
+						date_order_sub = date_order_string.substring(0,17)
+						date_order_sub = date_order_sub+'%'
+						console.log(date_order_sub)
+
+						db.query('SELECT * FROM orders WHERE location = ? AND date_order LIKE ?', [location, date_order_sub])
+							.then((orders) => {
+								if(orders == undefined || orders.length == 0){
+									next(new Error(config.errors.noOrderFound))
+								}else{
+									let i = 0
+									let emails = []
+									orders.forEach(order => {
+										db.query('SELECT * FROM users WHERE id = ?', [order.user_id])
+											.then((result) => {
+												emails.push(result[0].email)
+												order['email'] = result[0].email
+												order['first_name'] = result[0].first_name
+												order['last_name'] = result[0].last_name
+											})
+											.then(()=>{
+												if(emails.length == orders.length){
+													next(orders)
+												}
+											})
+									})
+								}
+							})
+					}else{						
+						next(new Error(config.errors.unknownLocation))
+					}
+				})
+		})
+	}
 }

@@ -52,15 +52,27 @@ mysql.createConnection({
 
 	/////////////////////////Users/////////////////////
 	UsersRouter.route('/users')
-		.get(async (req,res) => {
+		.get(verifyToken, async (req,res) => {
 			let All = await Users.getAll(req.query.max)
-			res.json(checkAndChange(All))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(All))
+				}
+			})
 		})
 
 	UsersRouter.route('/users/pro')
-		.get(async (req,res) => {
+		.get(verifyToken, async (req,res) => {
 			let All = await Users.getAllPro(req.query.max)
-			res.json(checkAndChange(All))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(All))
+				}
+			})
 		})
 
 	UsersRouter
@@ -76,19 +88,47 @@ mysql.createConnection({
 			})
 		})
 
-		.delete(async (req,res) => {
+		.delete(verifyToken, async (req,res) => {
 			let deleted = await Users.delete(req.params.id)
-			res.json(checkAndChange(deleted))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(deleted))
+				}
+			})
 		})
 
-		.put(async (req, res) => {
+		.put(verifyToken, async (req, res) => {
 			let updated = await Users.update(req.params.id, req.body.first_name, req.body.last_name, req.body.email, req.body.age)
-			res.json(checkAndChange(updated))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(updated))
+				}
+			})
 		})
 
 	UsersRouter.route('/users/login')
 		.post(async (req,res) => {//login
 			let logger = await Users.login(req.body.email, req.body.password)
+			if(logger.id != undefined ){
+				jwt.sign({logger}, process.env.API_KEY, {expiresIn: '30m'}, (err, token) => {
+					res.json(checkAndChange(
+						{
+						logger,
+						token
+						}))
+				})
+			}else{
+				res.json(checkAndChange(logger))
+			}
+		})
+	
+	UsersRouter.route('/android/login')
+		.post(async (req,res) => {//login
+			let logger = await Users.loginAndroid(req.body.email, req.body.password)
 			if(logger.id != undefined ){
 				jwt.sign({logger}, process.env.API_KEY, {expiresIn: '30m'}, (err, token) => {
 					res.json(checkAndChange(
@@ -145,11 +185,18 @@ mysql.createConnection({
 			let updatedPwd = await Users.updatePwd(req.params.id, req.body.password)
 			res.json(checkAndChange(updatedPwd))
 		})
+
 /////////////////////////////subscriptions////////////////////////////////////
 	UsersRouter.route('/subscriptions/:id')
-		.get(async (req,res) => {// get subscriptions by id
+		.get(verifyToken, async (req,res) => {// get subscriptions by id
 			let subscription = await Subscriptions.getByID( req.params.id )
-			res.json(checkAndChange(subscription))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(subscription))
+				}
+			})
 		})
 
 
@@ -176,25 +223,52 @@ mysql.createConnection({
 				}
 			})
 		})
-		.delete(async (req,res) => {
+		.delete(verifyToken, async (req,res) => {
 			let subscription = await Subscriptions.delete(req.params.user_id)
-			res.json(checkAndChange(subscription))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(subscription))
+				}
+			})
 		})
 
 	UsersRouter.route('/subscriptions/create')
-		.post(async (req,res) => {
+		.post(verifyToken, async (req,res) => {
 			let subscriptionsCreated = await Subscriptions.createSubscription(req.body.subscription_type, req.body.user_id)
-			res.json(checkAndChange(subscriptionsCreated))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(subscriptionsCreated))
+				}
+			})
 		})
+
 /////////////////////////////ticket////////////////////////////////////
-	UsersRouter.route('/ticket')
-		.post(async (req, res) => {
-			let ticket = await Ticket.createTicket(req.body.name,req.body.status,req.body.id_user,req.body.type,req.body.description,req.body.location)
-			res.json(checkAndChange(ticket))
+	UsersRouter.route('/ticket/create')
+		.post(verifyToken, async (req, res) => {
+			let ticket = await Ticket.createTicket(req.body.name, req.body.id_user, req.body.type, req.body.description, req.body.location)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(ticket))
+				}
+			})
 		})
-		.get(async (req, res) => {
-			let ticket = await Ticket.getAll(req.query.max)
-			res.json(checkAndChange(ticket))
+
+	UsersRouter.route('/tickets')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getNewTicket(req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
 		})
 
 /////////////////////////////abonnement////////////////////////////////////
@@ -246,7 +320,6 @@ mysql.createConnection({
 
 	UsersRouter.route('/abonnement/charge')
 		.post(verifyToken, async (req, res) => {
-			//let charge = await Abonnement.charge(req.body.token, req.body.amount)
 			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)
@@ -289,9 +362,15 @@ mysql.createConnection({
 				}
 			})
 		})
-		.delete(async (req, res) => {// delete open_space by id
+		.delete(verifyToken, async (req, res) => {// delete open_space by id
 			let opensSapce = await OpenSapce.delete( req.params.id )
-			res.json(checkAndChange(opensSapce))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(opensSapce))
+				}
+			})
 		})
 		.put(verifyToken, async (req, res) => {
 			let openSpace = await OpenSapce.update(req.params.id, req.body.location , req.body.wifi, req.body.drink, req.body.plateau_repas, req.body.conf_room, req.body.call_room, req.body.cosy_room, req.body.printers, req.body.laptops, req.body.schedule_mt_s, req.body.schedule_mt_e, req.body.schedule_f_s, req.body.schedule_f_e, req.body.schedule_we_s, req.body.schedule_we_e, req.body.adresse)
@@ -305,21 +384,21 @@ mysql.createConnection({
 		})
 
 	UsersRouter.route('/open_space/create')
-		.post(async (req,res) => {// create an open_space
+		.post(verifyToken, async (req,res) => {// create an open_space
 			let opensSapce = await OpenSapce.createOpenSpace(req.body.location, req.body.wifi, req.body.drink, req.body.plateau_repas, req.body.conf_room, req.body.call_room, req.body.cosy_room, req.body.printers, req.body.laptops, req.body.schedule_mt_s, req.body.schedule_mt_e, req.body.schedule_f_s, req.body.schedule_f_e, req.body.schedule_we_s, req.body.schedule_we_e, req.body.adresse)
-			res.json(checkAndChange(opensSapce))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(opensSapce))
+				}
+			})
 		})
 
 /////////////////////////////reservation////////////////////////////////////
 	UsersRouter.route('/reservation')
-		.get(async (req,res) => {
-			let reservation = await Reservation.getAll(req.query.max)
-			res.json(checkAndChange(reservation))
-		})
-
-	UsersRouter.route('/user/reservation/:id_user')
 		.get(verifyToken, async (req,res) => {
-			let reservation = await Reservation.getUserReservations(req.params.id_user)
+			let reservation = await Reservation.getAll(req.query.max)
 			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)
@@ -329,10 +408,64 @@ mysql.createConnection({
 			})
 		})
 
+	UsersRouter.route('/user/reservation/:id_user')
+		.get(verifyToken, async (req,res) => {
+			let reservations = await Reservation.getUserReservations(req.params.id_user)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(reservations))
+				}
+			})
+		})
+
+	UsersRouter.route('/user/borrowing/:id_user')
+		.get(verifyToken, async (req,res) => {
+			let borrowings = await Reservation.getUserBorrowings(req.params.id_user)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(borrowings))
+				}
+			})
+		})
+
+	UsersRouter.route('/openspace/reservation/:location')
+		.get(verifyToken, async (req,res) => {
+			let reservations = await Reservation.getOpenspaceReservations(req.params.location)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(reservations))
+				}
+			})
+		})
+
+	UsersRouter.route('/openspace/borrowing/:location')
+		.get(verifyToken, async (req,res) => {
+			let borrowings = await Reservation.getOpenspaceBorrowings(req.params.location)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(borrowings))
+				}
+			})
+		})
+
 	UsersRouter.route('/reservation/:id')
-		.get(async (req,res) => {
+		.get(verifyToken, async (req,res) => {
 			let reservation = await Reservation.getByID(req.params.id)
-			res.json(checkAndChange(reservation))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(reservation))
+				}
+			})
 		})
 		.delete(verifyToken, async (req,res) => {
 			let reservation = await Reservation.delete(req.params.id)
@@ -357,6 +490,7 @@ mysql.createConnection({
 				}
 			})
 		})
+
 /////////////////////////////orders////////////////////////////////////
 	UsersRouter.route('/orders')
 		.get(verifyToken, async (req,res) => {
@@ -382,15 +516,40 @@ mysql.createConnection({
 			})
 		})
 
+	UsersRouter.route('/openspace/orders/:location')
+		.get(verifyToken, async (req,res) => {
+			let orders = await Orders.getOpenspaceOrders(req.params.location)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(orders))
+				}
+			})
+		})
+
+
 
 	UsersRouter.route('/orders/:id')
-		.get(async (req,res) => {
+		.get(verifyToken, async (req,res) => {
 			let order = await Orders.getByID(req.params.id)
-			res.json(checkAndChange(order))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(order))
+				}
+			})
 		})
-		.delete(async (req,res) => {
+		.delete(verifyToken, async (req,res) => {
 			let order = await Orders.delete(req.params.id)
-			res.json(checkAndChange(order))
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(order))
+				}
+			})
 		})
 
 	UsersRouter.route('/orders/create')

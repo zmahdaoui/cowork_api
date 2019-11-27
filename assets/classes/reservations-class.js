@@ -10,6 +10,7 @@ module.exports = (_db, _config) => {
 }
 
 let Reservations = class {
+
     static getByID(id){
 		return new Promise((next) => {
 			db.query('SELECT * FROM reservation WHERE id = ?', [id])
@@ -25,7 +26,20 @@ let Reservations = class {
 	
 	static getUserReservations(id_user){
 		return new Promise((next) => {
-			db.query('SELECT * FROM reservation WHERE id_user = ?  ORDER BY id DESC', [id_user])
+			db.query('SELECT * FROM reservation WHERE id_user = ? AND type <> ? ORDER BY id DESC', [id_user,"laptop"])
+				.then((result) =>  {
+					if(result != []){
+						next(result)
+					}else
+						next(new Error(config.errors.unknownID))			
+				})
+				.catch((err) =>  reject(err))			
+		})
+	}
+	
+	static getUserBorrowings(id_user){
+		return new Promise((next) => {
+			db.query('SELECT * FROM reservation WHERE id_user = ? AND type = ? ORDER BY id DESC', [id_user,"laptop"])
 				.then((result) =>  {
 					if(result != []){
 						next(result)
@@ -357,9 +371,97 @@ let Reservations = class {
 				})
 				.catch((err) => next(err))
 			})	
-    }
-    
-    static delete(id){
+	}
+	
+	static getOpenspaceReservations(location){
+		return new Promise((next) => {
+			db.query('SELECT * FROM open_space WHERE location = ?', [location])
+				.then((result) => {
+					if(result != null){
+						var date_res_string = ''
+						var date_res_sub = ''							
+						date_res_string = date.format(new Date(), 'ddd. MMM. DD YYYY, HH:mm:SS')
+						date_res_sub = date_res_string.substring(0,17)
+						date_res_sub = date_res_sub+'%'
+						console.log(date_res_sub)
+
+						db.query('SELECT * FROM reservation WHERE location = ? AND date_res LIKE ? AND type <> ?', [location, date_res_sub,"laptop"])
+							.then((reservations) => {
+								console.log(reservations)
+								if(reservations == undefined || reservations.length == 0){
+									console.log(" nothing")
+									next(new Error(config.errors.noReservationFOund))
+								}else{
+									let i = 0
+									let emails = []
+									reservations.forEach(reservation => {
+										console.log(reservations)
+										db.query('SELECT * FROM users WHERE id = ?', [reservation.id_user])
+											.then((result) => {
+												emails.push(result[0].email)
+												console.log(emails)
+												reservation['email'] = result[0].email
+												reservation['first_name'] = result[0].first_name
+												reservation['last_name'] = result[0].last_name
+											})
+											.then(()=>{
+												console.log(emails)
+												if(emails.length == reservations.length){
+													next(reservations)
+												}
+											})
+									})
+								}
+							})
+					}else{						
+						next(new Error(config.errors.unknownLocation))
+					}
+				})
+		})
+	}
+
+	static getOpenspaceBorrowings(location){
+		return new Promise((next) => {
+			db.query('SELECT * FROM open_space WHERE location = ?', [location])
+				.then((result) => {
+					if(result != null){
+						var date_res_string = ''
+						var date_res_sub = ''							
+						date_res_string = date.format(new Date(), 'ddd. MMM. DD YYYY, HH:mm:SS')
+						date_res_sub = date_res_string.substring(0,17)
+						date_res_sub = date_res_sub+'%'
+
+						db.query('SELECT * FROM reservation WHERE location = ? AND date_res LIKE ? AND type = ?', [location, date_res_sub,"laptop"])
+							.then((reservations) => {
+								if(reservations == undefined || reservations.length == 0){
+									next(new Error(config.errors.noBorrowingFound))
+								}else{
+									let i = 0
+									let emails = []
+									reservations.forEach(reservation => {
+										db.query('SELECT * FROM users WHERE id = ?', [reservation.id_user])
+											.then((result) => {
+												emails.push(result[0].email)
+												reservation['email'] = result[0].email
+												reservation['first_name'] = result[0].first_name
+												reservation['last_name'] = result[0].last_name
+											})
+											.then(()=>{
+												if(emails.length == reservations.length){
+													next(reservations)
+												}
+											})
+									})
+								}
+							})
+					}else{						
+						next(new Error(config.errors.unknownLocation))
+					}
+				})
+		})
+	}
+    	
+	static delete(id){
 		return new Promise((next) => {
 			console.log(id)
 			db.query('SELECT * FROM reservation WHERE id = ?',[id])

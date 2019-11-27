@@ -9,23 +9,25 @@ module.exports = (_db, _config) => {
 }
 
 let Tickets = class {
-    static createTicket(name, status, id_user, type, description, location){		
+    static createTicket(name, id_user, type, description, location){		
 		return new Promise((next) =>{
             //verifie que l'email n'est pas deja pris
-            db.query('INSERT INTO ticket(name, date_creation, status, id_user, type, description, location) VALUES(?, ?, ?, ?, ?, ?, ?)',[name,  date.format(new Date(),'ddd. MMM. DD YYYY'), status, id_user, type, description, location])
+            db.query('INSERT INTO ticket(name, date_creation, status, id_user, type, description, location, open, resolved) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',[name,  date.format(new Date(),'ddd. MMM. DD YYYY'), "new", id_user, type, description, location, 'true', 'false'])
                 .then(()=>{
                     return db.query('SELECT * FROM ticket WHERE name = ? AND id_user = ?', [name, id_user])
                 })
                 .then((result) => {
                     next({
                         id: result[0].id,
-                        name: result[0].last,
+                        name: result[0].name,
                         date_creation: result[0].date_creation,
                         status: result[0].status,
                         id_user: result[0].id_user,
                         type: result[0].type,
                         description: result[0].description,
-                        location: result[0].location
+                        location: result[0].location,
+                        open: result[0].open,
+                        resolved: result[0].resolved
                     })
                 })
         })
@@ -45,34 +47,48 @@ let Tickets = class {
 					.catch((err) => next(err))
 			}
 		})
+	}
+	
+	static getNewTicket(max){
+		return new Promise((next) => {
+			if(max !=undefined && max>0 ){
+				db.query('SELECT * FROM ticket WHERE status = ? ORDER BY id DESC LIMIT 0, ?',["new", parseInt(max)])
+					.then( (result) => next(result))
+					.catch((err) => next(err))
+			}else if ( max !=undefined){
+				next(new Error(config.errors.wrongMaxValue))
+			}else {
+				db.query('SELECT * FROM ticket WHERE status = ? ORDER BY id DESC', ["new"])
+					.then( (result) => next(result))
+					.catch((err) => next(err))
+			}
+		})
     }
     
-    static update(id, status){
+    static update(id, status, open, resolved){
 		return new Promise((next) => {
 			if(id!=undefined ){
 				db.query('SELECT * FROM ticket WHERE id = ? ',[id])
 					.then((result) => {
 						if(result[0]==undefined ){
-							next(new Error('Non existing account')) 
+							next(new Error('Non existing ticket')) 
 						}else{
-							db.query('SELECT * FROM users WHERE id = ?', [id], (err, result) => {
-									if(last_name == undefined || last_name.trim() =='')
-										last_name = result[0].last_name
-									else
-										last_name = last_name.trim()	
+							if(status == undefined || status.trim() =='')
+								status = result[0].status
+							else
+								status = status.trim()	
 									
-									if(first_name == undefined || first_name.trim() =='')
-										first_name = result[0].first_name
-									else
-										first_name = first_name.trim()
-										
-									if(birthday == undefined || birthday.trim() == '')
-										birthday = result[0].birthday
-									else
-										birthday = birthday							
-										
-									return db.query('UPDATE users SET  first_name = ?, last_name = ?, birthday = ? WHERE id = ?',[first_name, last_name, birthday, id])
-							})
+							if(open == undefined || open.trim() =='')
+								open = result[0].open
+							else
+								open = open.trim()
+								
+							if(resolved == undefined || resolved.trim() == '')
+								resolved = result[0].resolved
+							else
+								resolved = resolved							
+									
+							return db.query('UPDATE ticket SET  status = ?, open = ?, resolved = ? WHERE id = ?',[status, open, resolved, id])
 						}
 					})
 					.then(() => next(true))

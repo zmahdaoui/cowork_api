@@ -53,6 +53,20 @@ let Users = class {
 				.catch((err) => reject(err))
 		})
 	}
+
+	//connexion
+	static loginAndroid(email,password){
+		return new Promise((next)=> {
+			db.query('SELECT * FROM users WHERE email = ? AND password = ?', [email,password])
+				.then((result) => {
+					if(result[0] != undefined){
+						next(result[0])
+					}else
+						next(new Error(config.errors.wrongEmailOrPwd)) 
+				})
+				.catch((err) => reject(err))
+		})
+	}
 	
 	//creation d'un utilisateur
 	static createUser(first_name, last_name, email, password, birthday){		

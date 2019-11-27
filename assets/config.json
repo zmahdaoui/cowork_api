@@ -10,6 +10,9 @@
 	"errors": {
 		"unknownID": "unknown id",
 		"unknownLocation": "unknown location",
+		"noReservationFOund": "no reservation found",
+		"noBorrowingFound": "no borrowing found",
+		"noOrderFound": "no order found",
 		"wrongIDs": "wrong id or id2",
 		"wrongEmailOrPwd": "wrong email or password",
 		"wrongMaxValue": "wrong max value",
