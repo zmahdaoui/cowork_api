@@ -235,21 +235,22 @@ mysql.createConnection({
 		})
 
 	UsersRouter.route('/subscriptions/create')
-		.post(verifyToken, async (req,res) => {
+		.post(async (req,res) => {
 			let subscriptionsCreated = await Subscriptions.createSubscription(req.body.subscription_type, req.body.user_id)
-			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+			res.json(checkAndChange(subscriptionsCreated))
+			/*jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)
 				}else{
 					res.json(checkAndChange(subscriptionsCreated))
 				}
-			})
+			})*/
 		})
 
 /////////////////////////////ticket////////////////////////////////////
 	UsersRouter.route('/ticket/create')
 		.post(verifyToken, async (req, res) => {
-			let ticket = await Ticket.createTicket(req.body.name, req.body.id_user, req.body.type, req.body.description, req.body.location)
+			let ticket = await Ticket.createTicket(req.body.name, req.body.id_user, req.body.user_name, req.body.type, req.body.description, req.body.location)
 			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)
@@ -259,9 +260,21 @@ mysql.createConnection({
 			})
 		})
 
-	UsersRouter.route('/tickets')		
+	UsersRouter.route('/tickets/new')		
 		.get(verifyToken, async (req, res) => {
 			let tickets = await Ticket.getNewTicket(req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+
+	UsersRouter.route('/tickets/client/new/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientNewTicket(req.params.id,req.query.max)
 			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)

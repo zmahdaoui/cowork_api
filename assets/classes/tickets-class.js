@@ -9,10 +9,11 @@ module.exports = (_db, _config) => {
 }
 
 let Tickets = class {
-    static createTicket(name, id_user, type, description, location){		
+	
+    static createTicket(name, id_user, user_name, type, description, location){		
 		return new Promise((next) =>{
             //verifie que l'email n'est pas deja pris
-            db.query('INSERT INTO ticket(name, date_creation, status, id_user, type, description, location, open, resolved) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)',[name,  date.format(new Date(),'ddd. MMM. DD YYYY'), "new", id_user, type, description, location, 'true', 'false'])
+            db.query('INSERT INTO ticket(name, date_creation, status, id_user, user_name, type, description, location, open, resolved) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',[name,  date.format(new Date(),'ddd. MMM. DD YYYY'), "new", id_user, user_name, type, description, location, 'true', 'false'])
                 .then(()=>{
                     return db.query('SELECT * FROM ticket WHERE name = ? AND id_user = ?', [name, id_user])
                 })
@@ -23,6 +24,7 @@ let Tickets = class {
                         date_creation: result[0].date_creation,
                         status: result[0].status,
                         id_user: result[0].id_user,
+                        user_name: result[0].user_name,
                         type: result[0].type,
                         description: result[0].description,
                         location: result[0].location,
@@ -59,6 +61,21 @@ let Tickets = class {
 				next(new Error(config.errors.wrongMaxValue))
 			}else {
 				db.query('SELECT * FROM ticket WHERE status = ? ORDER BY id DESC', ["new"])
+					.then( (result) => next(result))
+					.catch((err) => next(err))
+			}
+		})
+	}
+	static getClientNewTicket(id,max){
+		return new Promise((next) => {
+			if(max !=undefined && max>0 ){
+				db.query('SELECT * FROM ticket WHERE status = ? AND id_user = ? ORDER BY id DESC LIMIT 0, ?',["new", id, parseInt(max)])
+					.then( (result) => next(result))
+					.catch((err) => next(err))
+			}else if ( max !=undefined){
+				next(new Error(config.errors.wrongMaxValue))
+			}else {
+				db.query('SELECT * FROM ticket WHERE status = ? AND id_user = ? ORDER BY id DESC', ["new", id])
 					.then( (result) => next(result))
 					.catch((err) => next(err))
 			}

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 01 Novembre 2019 à 18:04
+-- Généré le :  Dim 01 Décembre 2019 à 15:59
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `abonnement` (
   `price` int(11) NOT NULL,
   `commitment` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Contenu de la table `abonnement`
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `open_space` (
 --
 
 INSERT INTO `open_space` (`id`, `location`, `wifi`, `drink`, `plateau_repas`, `conf_room`, `call_room`, `cosy_room`, `printers`, `laptops`, `schedule_mt`, `schedule_f`, `schedule_we`, `adresse`) VALUES
-(4, 'Bastille', 'true', 'true', 'true', 2, 3, 1, 1, 0, '9,20', '9,20', '11,20', '21-19 Rue Saint-Antoine 75004 Paris'),
+(4, 'Bastille', 'true', 'true', 'true', 2, 3, 1, 1, 1, '9,20', '9,20', '11,20', '21-19 Rue Saint-Antoine 75004 Paris'),
 (5, 'Republique', 'true', 'true', 'false', 7, 5, 4, 3, 25, '8,21', '9,23', '9,20', '1 Place de la République 75003 Paris'),
 (7, 'Odéon', 'true', 'true', 'true', 4, 2, 2, 2, 18, '9,20', '9,20', '11,20', 'Place Henri Mondor 75006 Paris'),
 (9, 'Place d''Italie', 'true', 'true', 'true', 5, 4, 3, 1, 20, '9,20', '9,20', '11,20', '79 Avenue des Gobelins 75013 Paris'),
@@ -110,7 +110,16 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `count` int(11) NOT NULL,
   `time` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+
+--
+-- Contenu de la table `orders`
+--
+
+INSERT INTO `orders` (`id`, `location`, `date_order`, `user_id`, `count`, `time`) VALUES
+(18, 'Bastille', 'Sat. Nov. 30 2019, 00:00:00', 7, 2, '13:30'),
+(19, 'Bastille', 'Wed. Nov. 20 2019, 00:00:00', 7, 1, '13:30'),
+(20, 'Odéon', 'Sat. Nov. 30 2019, 00:00:00', 9, 2, '13:30');
 
 -- --------------------------------------------------------
 
@@ -128,7 +137,24 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `type` varchar(255) NOT NULL,
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Contenu de la table `reservation`
+--
+
+INSERT INTO `reservation` (`id`, `location`, `start`, `end`, `date_res`, `number`, `type`, `id_user`) VALUES
+(2, 'Republique', 8, 21, 'Wed. Nov. 20 2019, 00:00:00', 2, 'laptop', 7),
+(3, 'Republique', 8, 9, 'Wed. Nov. 06 2019, 00:00:00', 2, 'conf_room', 7),
+(4, 'Bastille', 9, 11, 'Mon. Nov. 18 2019, 00:00:00', 1, 'conf_room', 7),
+(5, 'Bastille', 15, 18, 'Tue. Nov. 19 2019, 00:00:00', 1, 'conf_room', 7),
+(7, 'Bastille', 9, 10, 'Fri. Nov. 29 2019, 00:00:00', 1, 'conf_room', 7),
+(9, 'Bastille', 9, 11, 'Wed. Nov. 20 2019, 00:00:00', 1, 'laptop', 7),
+(10, 'Odéon', 9, 11, 'Thu. Nov. 21 2019, 00:00:00', 1, 'call_room', 7),
+(11, 'Place d''Italie', 13, 14, 'Sat. Nov. 23 2019, 00:00:00', 4, 'call_room', 7),
+(12, 'Place d''Italie', 10, 13, 'Fri. Nov. 22 2019, 00:00:00', 3, 'conf_room', 7),
+(14, 'Bastille', 11, 14, 'Sun. Dec. 01 2019, 00:00:00', 1, 'conf_room', 9),
+(15, 'Odéon', 11, 12, 'Sat. Nov. 30 2019, 00:00:00', 2, 'call_room', 9);
 
 -- --------------------------------------------------------
 
@@ -143,7 +169,15 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `subscription_date` varchar(255) NOT NULL,
   `subscription_end` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `subscriptions`
+--
+
+INSERT INTO `subscriptions` (`id`, `subscription_type`, `user_id`, `subscription_date`, `subscription_end`) VALUES
+(2, 8, 7, 'Sat. Nov. 02 2019, 01:34:76', 'Mon. Dec. 02 2019, 01:34:76'),
+(3, 7, 9, 'Sat. Nov. 30 2019, 15:29:81', 'Mon. Nov. 30 2020, 15:29:81');
 
 -- --------------------------------------------------------
 
@@ -157,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `tech_mat` (
   `location` varchar(255) NOT NULL,
   `number` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=158 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=162 ;
 
 --
 -- Contenu de la table `tech_mat`
@@ -318,7 +352,8 @@ INSERT INTO `tech_mat` (`id`, `type`, `location`, `number`) VALUES
 (154, 'laptop', 'Beaubourg', 17),
 (155, 'laptop', 'Beaubourg', 18),
 (156, 'laptop', 'Beaubourg', 19),
-(157, 'laptop', 'Beaubourg', 20);
+(157, 'laptop', 'Beaubourg', 20),
+(161, 'laptop', 'Bastille', 1);
 
 -- --------------------------------------------------------
 
@@ -332,11 +367,38 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `date_creation` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `user_name` varchar(255) NOT NULL,
+  `id_owner` int(11) NOT NULL,
+  `owner_name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
+  `open` varchar(255) NOT NULL,
+  `resolved` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- Contenu de la table `ticket`
+--
+
+INSERT INTO `ticket` (`id`, `name`, `date_creation`, `status`, `id_user`, `user_name`, `id_owner`, `owner_name`, `type`, `description`, `location`, `open`, `resolved`) VALUES
+(1, 'Pad souris ne fonctionne plus', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'test test', 'Batislle', 'true', 'false'),
+(2, 'Pad souris ne fonctionne plus', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'test test', 'Batislle', 'true', 'false'),
+(3, 'écran cassé', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'écran test', 'République', 'true', 'false'),
+(4, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(5, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(6, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(7, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(8, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(9, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
+(10, 'Test Android emu', 'Fri. Nov. 29 2019', 'new', 7, '', 0, '', 'Logiciel', 'stop Marche stp marche', 'Beaubourg', 'true', 'false'),
+(11, 'zakarya', 'Fri. Nov. 29 2019', 'new', 7, '', 0, '', 'Matériel', 'azeazeaeazea', 'Ternes', 'true', 'false'),
+(12, 'testt', 'Fri. Nov. 29 2019', 'new', 7, '', 0, '', 'Matériel', 'ssss', 'Place d''Italie', 'true', 'false'),
+(13, 'zae', 'Fri. Nov. 29 2019', 'new', 7, '', 0, '', 'Matériel', 'azdadaz', 'Bastille', 'true', 'false'),
+(14, 'qsdd', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, '', 'Matériel', 'qsdd', 'Bastille', 'true', 'false'),
+(15, 'test', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, '', 'Matériel', 'azeaze', 'Ternes', 'true', 'false'),
+(16, 'test', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, '', 'Matériel', 'azeaze', 'Ternes', 'true', 'false');
 
 -- --------------------------------------------------------
 
@@ -354,7 +416,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `client` varchar(255) NOT NULL,
   `date_inscription` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+
+--
+-- Contenu de la table `users`
+--
+
+INSERT INTO `users` (`id`, `last_name`, `first_name`, `email`, `birthday`, `password`, `client`, `date_inscription`) VALUES
+(7, 'Zakarya', 'Mahdaoui', 'mh.zakk@gmail.com', '1994/08/16 00:00:00', 'azaza', 'true', 'Fri. Nov. 01 2019'),
+(8, 'mahdaoui', 'bassma', 'mh.bassma@gmail.com', '1992/07/09 00:00:00', 'bassma', 'false', 'Thu. Nov. 07 2019'),
+(9, 'teste', 'teste', 'teste@gmail.com', '1993/11/01 00:00:00', 'teste', 'true', 'Sat. Nov. 30 2019');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
