@@ -5,7 +5,7 @@
 		"host": "localhost",
 		"database": "cowork",
 		"user": "root",
-		"password": "root"
+		"password": ""
 	},
 	"errors": {
 		"unknownID": "unknown id",
