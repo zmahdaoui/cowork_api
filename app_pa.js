@@ -1,6 +1,6 @@
-if(process.env.NODE_ENV !== 'production'){
+/*if(process.env.NODE_ENV !== 'production'){
 	require('dotenv').config()
-}
+}*/
 require('babel-register')
 const express = require('express')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
@@ -14,6 +14,7 @@ const cors = require('cors')
 const app = express()
 const date = require('date-and-time')
 
+console.log(process.env.API_KEY)
 
 app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
