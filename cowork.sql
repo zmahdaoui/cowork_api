@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 04 Décembre 2019 à 06:24
+-- Généré le :  Mer 04 Décembre 2019 à 13:11
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -423,7 +423,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `client` varchar(255) NOT NULL,
   `date_inscription` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Contenu de la table `users`
@@ -433,7 +433,8 @@ INSERT INTO `users` (`id`, `last_name`, `first_name`, `email`, `birthday`, `pass
 (7, 'Zakarya', 'Mahdaoui', 'mh.zakk@gmail.com', '1994/08/16 00:00:00', 'azaza', 'true', 'Fri. Nov. 01 2019'),
 (8, 'mahdaoui', 'bassma', 'mh.bassma@gmail.com', '1992/07/09 00:00:00', 'bassma', 'false', 'Thu. Nov. 07 2019'),
 (9, 'teste', 'teste', 'teste@gmail.com', '1993/11/01 00:00:00', 'teste', 'true', 'Sat. Nov. 30 2019'),
-(14, 'azert', 'azert', 'b.belazouz@gmail.com', '2019/12/04 00:00:00', 'azert', 'false', 'Wed. Dec. 04 2019');
+(14, 'azert', 'azert', 'b.belazouz@gmail.com', '2019/12/04 00:00:00', 'azert', 'false', 'Wed. Dec. 04 2019'),
+(15, 'zinedine', 'zidane', 'z.zidane@gmail.com', '1979/12/29 00:00:00', 'zidane', 'false', 'Wed. Dec. 04 2019');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
