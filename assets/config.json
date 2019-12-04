@@ -1,6 +1,6 @@
 {
 	"rootAPI": "/api-sg/v1/",
-	"port": 3030,
+	"port": 80,
 	"db":{
 		"host": "localhost",
 		"database": "cowork",
