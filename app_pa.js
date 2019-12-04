@@ -198,6 +198,16 @@ mysql.createConnection({
 				}
 			})
 		})
+		.put(verifyToken, async (req, res) => {
+			let subscription = await Subscriptions.update( req.params.id )
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(subscription))
+				}
+			})
+		})
 
 
 	UsersRouter.route('/user/subscriptions/:user_id')

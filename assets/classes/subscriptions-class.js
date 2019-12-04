@@ -104,4 +104,19 @@ let Subscriptions = class {
 				.catch((err) =>  reject(err))
 		})
 	}
+
+	static update(id){
+		return new Promise((next) => {
+			db.query('SELECT * FROM subscriptions WHERE id = ?',[id])
+				.then((result) => {
+					if(result[0]==undefined ){
+						next(new Error('No Subscription found'))
+					}else{
+						return db.query('UPDATE subscriptions SET  email_sent = ? WHERE id = ?',["sent", id])
+					}
+					})
+				.then(() => next(true))
+				.catch((err) => next(err))
+		})
+	}
 }
