@@ -60,7 +60,23 @@ let Users = class {
 			db.query('SELECT * FROM users WHERE email = ? AND password = ?', [email,password])
 				.then((result) => {
 					if(result[0] != undefined){
-						next(result[0])
+						db.query('SELECT * FROM ticket WHERE late = ? AND open = ? AND resolved = ?', ["false", "true", "false"])
+							.then((tickets) => {
+								if(tickets != undefined || tickets.length > 0 ){
+									var i = 0
+									var today = new Date()
+									var date_creation
+									var sub 
+									for(i; i< tickets.length; i++){
+										date_creation = date.parse(tickets[i].date_creation.substring(5),'MMM. DD YYYY')
+										sub = date.subtract(today,date_creation).toDays()
+										if(sub>7){
+											db.query('UPDATE ticket SET late = ? WHERE id = ?', ["true", tickets[i].id])
+										}
+									}
+								}
+								next(result[0])
+							})
 					}else
 						next(new Error(config.errors.wrongEmailOrPwd)) 
 				})

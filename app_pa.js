@@ -1,6 +1,6 @@
-/*if(process.env.NODE_ENV !== 'production'){
+if(process.env.NODE_ENV !== 'production'){
 	require('dotenv').config()
-}*/
+}
 require('babel-register')
 const express = require('express')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
@@ -14,7 +14,6 @@ const cors = require('cors')
 const app = express()
 const date = require('date-and-time')
 
-console.log(process.env.API_KEY)
 
 app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -261,7 +260,7 @@ mysql.createConnection({
 /////////////////////////////ticket////////////////////////////////////
 	UsersRouter.route('/ticket/create')
 		.post(verifyToken, async (req, res) => {
-			let ticket = await Ticket.createTicket(req.body.name, req.body.id_user, req.body.user_name, req.body.type, req.body.description, req.body.location)
+			let ticket = await Ticket.createTicket(req.body.name, req.body.id_user, req.body.user_name, req.body.type, req.body.material_id, req.body.description, req.body.location)
 			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
 				if(err){
 					res.sendStatus(403)
@@ -270,6 +269,18 @@ mysql.createConnection({
 				}
 			})
 		})
+
+	UsersRouter.route('/tech/mat/:location')		
+		.get(verifyToken, async (req, res) => {
+			let material = await Ticket.getTechMat(req.params.location, req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(material))
+				}
+			})
+		})	
 
 	UsersRouter.route('/tickets/new')		
 		.get(verifyToken, async (req, res) => {
@@ -283,6 +294,66 @@ mysql.createConnection({
 			})
 		})
 
+	UsersRouter.route('/tickets/pro/late/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getProLateTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+	
+	UsersRouter.route('/tickets/pro/inprogress/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getProInProgressTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+
+	UsersRouter.route('/tickets/pro/waiting/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getProWaitingTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+		
+	UsersRouter.route('/tickets/pro/closed/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getProClosedTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})	
+
+	UsersRouter.route('/tickets/pro/resolved/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getProResolvedTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})	
+
 	UsersRouter.route('/tickets/client/new/:id')		
 		.get(verifyToken, async (req, res) => {
 			let tickets = await Ticket.getClientNewTicket(req.params.id,req.query.max)
@@ -294,7 +365,78 @@ mysql.createConnection({
 				}
 			})
 		})
+	
+	UsersRouter.route('/tickets/client/late/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientLateTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+	
+	UsersRouter.route('/tickets/client/inprogress/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientInProgressTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
 
+	UsersRouter.route('/tickets/client/waiting/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientWaitingTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})
+		
+	UsersRouter.route('/tickets/client/closed/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientClosedTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})	
+
+	UsersRouter.route('/tickets/client/resolved/:id')		
+		.get(verifyToken, async (req, res) => {
+			let tickets = await Ticket.getClientResolvedTicket(req.params.id,req.query.max)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})	
+
+	UsersRouter.route('/tickets/update')		
+		.put(verifyToken, async (req, res) => {
+			let tickets = await Ticket.update(req.body.id,req.body.status,req.body.id_owner,req.body.owner_name,req.body.open,req.body.resolved,req.body.late)
+			jwt.verify(req.token, process.env.API_KEY, (err, authData) => {
+				if(err){
+					res.sendStatus(403)
+				}else{
+					res.json(checkAndChange(tickets))
+				}
+			})
+		})		
 /////////////////////////////abonnement////////////////////////////////////
 	UsersRouter.route('/abonnement')
 		.get(verifyToken, async (req,res) => {

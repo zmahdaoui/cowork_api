@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 04 Décembre 2019 à 13:11
+-- Généré le :  Mar 10 Décembre 2019 à 17:14
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -378,34 +378,23 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `id_owner` int(11) NOT NULL,
   `owner_name` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
+  `material_id` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
   `open` varchar(255) NOT NULL,
   `resolved` varchar(255) NOT NULL,
+  `late` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Contenu de la table `ticket`
 --
 
-INSERT INTO `ticket` (`id`, `name`, `date_creation`, `status`, `id_user`, `user_name`, `id_owner`, `owner_name`, `type`, `description`, `location`, `open`, `resolved`) VALUES
-(1, 'Pad souris ne fonctionne plus', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'test test', 'Batislle', 'true', 'false'),
-(2, 'Pad souris ne fonctionne plus', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'test test', 'Batislle', 'true', 'false'),
-(3, 'écran cassé', 'Mon. Nov. 25 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'matériel', 'écran test', 'République', 'true', 'false'),
-(4, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(5, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(6, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(7, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(8, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(9, 'écran Bleu', 'Wed. Nov. 27 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'logiciel', 'écran test', 'Bastille', 'true', 'false'),
-(10, 'Test Android emu', 'Fri. Nov. 29 2019', 'new', 9, 'teste teste', 0, 'null', 'Logiciel', 'stop Marche stp marche', 'Beaubourg', 'true', 'false'),
-(11, 'zakarya', 'Fri. Nov. 29 2019', 'new', 9, 'teste teste', 0, 'null', 'Matériel', 'azeazeaeazea', 'Ternes', 'true', 'false'),
-(12, 'testt', 'Fri. Nov. 29 2019', 'new', 9, 'teste teste', 0, 'null', 'Matériel', 'ssss', 'Place d''Italie', 'true', 'false'),
-(13, 'zae', 'Fri. Nov. 29 2019', 'new', 9, 'teste teste', 0, 'null', 'Matériel', 'azdadaz', 'Bastille', 'true', 'false'),
-(14, 'qsdd', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'qsdd', 'Bastille', 'true', 'false'),
-(15, 'test', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'azeaze', 'Ternes', 'true', 'false'),
-(16, 'test', 'Fri. Nov. 29 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'azeaze', 'Ternes', 'true', 'false');
+INSERT INTO `ticket` (`id`, `name`, `date_creation`, `status`, `id_user`, `user_name`, `id_owner`, `owner_name`, `type`, `material_id`, `description`, `location`, `open`, `resolved`, `late`) VALUES
+(18, 'live test', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Logiciel', 'laptop 1', 'test', 'Bastille', 'true', 'false', 'true'),
+(19, 'live test', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Logiciel', 'laptop 1', 'test', 'Bastille', 'true', 'false', 'false'),
+(20, 'azeeee', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'laptop 4', 'azeaez', 'Place d''Italie', 'true', 'false', 'false');
 
 -- --------------------------------------------------------
 
