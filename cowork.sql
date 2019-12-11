@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 10 Décembre 2019 à 21:21
+-- Généré le :  Mer 11 Décembre 2019 à 14:11
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `count` int(11) NOT NULL,
   `time` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Contenu de la table `orders`
@@ -119,7 +119,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 INSERT INTO `orders` (`id`, `location`, `date_order`, `user_id`, `count`, `time`) VALUES
 (18, 'Bastille', 'Sat. Nov. 30 2019, 00:00:00', 7, 2, '13:30'),
 (19, 'Bastille', 'Wed. Nov. 20 2019, 00:00:00', 7, 1, '13:30'),
-(20, 'Odéon', 'Sat. Nov. 30 2019, 00:00:00', 9, 2, '13:30');
+(20, 'Odéon', 'Sat. Nov. 30 2019, 00:00:00', 9, 2, '13:30'),
+(21, 'Bastille', 'Wed. Dec. 11 2019, 00:00:00', 7, 1, '13:30');
 
 -- --------------------------------------------------------
 
@@ -137,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `type` varchar(255) NOT NULL,
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
 
 --
 -- Contenu de la table `reservation`
@@ -161,7 +162,13 @@ INSERT INTO `reservation` (`id`, `location`, `start`, `end`, `date_res`, `number
 (24, 'Odéon', 12, 17, 'Fri. Dec. 06 2019, 00:00:00', 3, 'laptop', 7),
 (25, 'Odéon', 11, 12, 'Wed. Dec. 18 2019, 00:00:00', 1, 'call_room', 7),
 (26, 'Odéon', 10, 12, 'Thu. Dec. 12 2019, 00:00:00', 3, 'conf_room', 7),
-(27, 'Bastille', 9, 10, 'Thu. Dec. 05 2019, 00:00:00', 1, 'conf_room', 7);
+(27, 'Bastille', 9, 10, 'Thu. Dec. 05 2019, 00:00:00', 1, 'conf_room', 7),
+(28, 'Bastille', 9, 10, 'Wed. Dec. 11 2019, 00:00:00', 1, 'conf_room', 7),
+(29, 'Bastille', 9, 11, 'Wed. Dec. 11 2019, 00:00:00', 1, 'call_room', 7),
+(30, 'Bastille', 11, 12, 'Wed. Dec. 11 2019, 00:00:00', 1, 'call_room', 7),
+(31, 'Bastille', 9, 10, 'Wed. Dec. 11 2019, 00:00:00', 1, 'laptop', 7),
+(32, 'Bastille', 10, 11, 'Wed. Dec. 11 2019, 00:00:00', 1, 'laptop', 7),
+(33, 'Bastille', 11, 12, 'Wed. Dec. 11 2019, 00:00:00', 1, 'laptop', 7);
 
 -- --------------------------------------------------------
 
@@ -177,14 +184,15 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   `subscription_end` varchar(255) NOT NULL,
   `email_sent` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Contenu de la table `subscriptions`
 --
 
 INSERT INTO `subscriptions` (`id`, `subscription_type`, `user_id`, `subscription_date`, `subscription_end`, `email_sent`) VALUES
-(5, 8, 7, 'Wed. Dec. 04 2019, 03:28:14', 'Fri. Dec. 06 2019, 03:28:14', 'sent');
+(8, 8, 7, 'Wed. Dec. 11 2019, 11:02:83', 'Sat. Jan. 11 2020, 11:02:83', ''),
+(9, 8, 9, 'Wed. Dec. 11 2019, 11:28:49', 'Sat. Jan. 11 2020, 11:28:49', '');
 
 -- --------------------------------------------------------
 
@@ -344,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `resolved` varchar(255) NOT NULL,
   `late` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Contenu de la table `ticket`
@@ -352,8 +360,12 @@ CREATE TABLE IF NOT EXISTS `ticket` (
 
 INSERT INTO `ticket` (`id`, `name`, `date_creation`, `status`, `id_user`, `user_name`, `id_owner`, `owner_name`, `type`, `material_id`, `description`, `location`, `open`, `resolved`, `late`) VALUES
 (18, 'live test', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Logiciel', 'laptop 1', 'test', 'Bastille', 'true', 'false', 'true'),
-(19, 'live test', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Logiciel', 'laptop 1', 'test', 'Bastille', 'true', 'false', 'false'),
-(20, 'azeeee', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'laptop 4', 'azeaez', 'Place d''Italie', 'true', 'false', 'false');
+(19, 'live test', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 8, 'bassma mahdaoui', 'Logiciel', 'laptop 1', 'test', 'Bastille', 'false', 'true', 'false'),
+(20, 'azeeee', 'Tue. Dec. 10 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'laptop 4', 'azeaez', 'Place d''Italie', 'false', 'false', 'false'),
+(21, 'test 1', 'Wed. Dec. 11 2019', 'new', 7, 'Mahdaoui Zakarya', 0, 'null', 'Matériel', 'laptop 5', 'test 1', 'Odéon', 'true', 'false', 'false'),
+(22, 'test 2', 'Wed. Dec. 11 2019', 'waiting', 7, 'Mahdaoui Zakarya', 8, 'bassma mahdaoui', 'Logiciel', 'printer 1', 'printer', 'Beaubourg', 'true', 'false', 'false'),
+(23, 'test 3', 'Wed. Dec. 11 2019', 'in progress', 7, 'Mahdaoui Zakarya', 8, 'bassma mahdaoui', 'Matériel', 'laptop 1', 'laptop test', 'Bastille', 'true', 'false', 'false'),
+(24, 'test4', 'Wed. Dec. 11 2019', 'in progress', 7, 'Mahdaoui Zakarya', 8, 'bassma mahdaoui', 'Logiciel', 'laptop 10', 'laptop 10 test 4', 'République', 'false', 'true', 'false');
 
 -- --------------------------------------------------------
 
